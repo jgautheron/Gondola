@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>foo</title>
+        <style type="text/css">
+            #foo, #bar {
+                width:50px;
+                position:relative;
+            }
+
+            .item {
+                height:50px;
+                line-height:50px;
+                text-align:center;
+                vertical-align:center;
+                background:#ccc;
+            }
+
+            .wrapper {
+                height:150px;
+                overflow:hidden;
+            }
+
+        </style>
+    </head>
+    <body>
+        <button type="button" id="top">top</button>
+        <div class="wrapper">
+            <div id="foo" style="top:0">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+            </div>
+            <div id="bar" style="top:0">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+            </div>
+        </div>
+        <button type="button" id="bot">bot</button>
+
+        <script type="text/javascript" src="yui-min.js"></script>
+        <script type="text/javascript">
+
+        YUI().use('anim', 'node', function(Y) {
+
+
+            var $ = function(el) {
+                return document.getElementById(el);
+            }
+
+            var i = 0;
+
+            $('top').onclick = function() {
+                if(i !== 2) {
+                    i++;
+
+                    new Y.Anim({
+                            node: '#foo',
+                            to: {
+                                top: parseInt($('foo').style.top) - 50 + 'px'
+                            }
+                    }).run();
+
+                    new Y.Anim({
+                            node: '#bar',
+                            to: {
+                                top: parseInt($('bar').style.top) - 50 + 'px'
+                            }
+                    }).run();
+
+
+
+                } else {
+
+
+                    var foo = new Y.Anim({
+                            node: '#foo',
+                            to: {
+                                top: parseInt($('bar').style.top) - 50 + 'px'
+                            }
+                    });
+                    foo.on('end', function() {
+
+                    $('foo').style.top = '0';
+                    });
+                    foo.run();
+
+                    var bar = new Y.Anim({
+                            node: '#bar',
+                            to: {
+                                top: parseInt($('bar').style.top) - 50 + 'px'
+                            }
+                    });
+                    bar.on('end', function() {
+
+                    $('bar').style.top = '0';
+                    });
+                    bar.run();
+
+                    i=0;
+                }
+
+            }
+        });
+
+        </script>
+
+
+    </body>
+</html>

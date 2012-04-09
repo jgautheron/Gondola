@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Gondola test</title>
+    <style type="text/css">
+    img {
+        border:0;
+    }
+
+    /* YUI3 gondola - jgautheron */
+    .yui3-gondola-container {
+        width:640px;
+        margin:0 auto;
+    }
+
+    .yui3-gondola-image, .yui3-gondola-images {
+        float:left;
+    }
+
+    .yui-3-gondola-images-viewport, .yui3-gondola-image {
+        height:268px;
+        overflow:hidden;
+        position:relative;
+    }
+
+    .yui3-gondola-image {
+        width:530px;
+
+        opacity:0;
+        -moz-opacity:0;
+        -webkit-opacity:0;
+        -khtml-opacity:0;
+        filter:alpha(opacity=0);
+    }
+
+    .yui3-gondola-image img {
+        position:absolute;
+        top:0;
+        left:0;
+    }
+
+    .yui3-gondola-title {
+        position:absolute;
+        bottom:2px;
+        left:5px;
+        color:#fff;
+        font:normal 11px Tahoma,Arial,sans-serif;
+        text-shadow:#000 1px 1px 0;
+        width:210px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        /*-moz-binding:url('ellipsis.xml#ellipsis');*/
+    }
+
+    .yui3-gondola-title-bg {
+        position:absolute;
+        bottom:0;
+        left:0;
+        right:0;
+        background:#000;
+        height:20px;
+        opacity:.3;
+        -moz-opacity:.3;
+        -webkit-opacity:.3;
+        -khtml-opacity:.3;
+        filter:alpha(opacity=30);
+    }
+
+    .yui3-gondola-link {
+        position:absolute;
+        display:block;
+        bottom:2px;
+        right:3px;
+        color:#666;
+        font:bold 10px Tahoma,Arial,sans-serif;
+        background:#fff;
+        padding:0 5px;
+        border:1px solid #666;
+        border-radius:10px;
+        -moz-border-radius:10px;
+        -webkit-border-radius:10px;
+        text-decoration:none;
+        outline:0;
+    }
+
+    .yui3-gondola-link:hover {
+        border:1px solid #333;
+    }
+
+    .yui3-gondola-link img {
+        position:relative;
+        padding-left:3px;
+    }
+
+    .yui3-gondola-top, .yui3-gondola-bottom {
+        display:block;
+        width:121px;
+        height:14px;
+        background-image:url(/orange/arrows.png);
+        background-repeat:no-repeat;
+        position:absolute;
+        outline:0;
+        left:0;
+        z-index:50;
+    }
+
+    .yui3-gondola-top {
+        top:0;
+        background-position:top left;
+    }
+
+    .yui3-gondola-bottom {
+        bottom:0;
+        background-position:bottom right;
+    }
+
+    .yui-3-gondola-images-viewport {
+        width:121px;
+    }
+
+    .yui3-gondola-images {
+        list-style:none;
+        margin:14px 0 0 3px;
+        padding:0;
+        position:relative;
+    }
+
+    .yui3-gondola-images li {
+        padding:0;
+        margin:0;
+        position:relative;
+    }
+
+    .yui3-gondola-images a {
+        display:block;
+        width:121px;
+        height:58px;
+        outline:0;
+        border:1px solid #fff;
+    }
+
+    /* END OF YUI3 small image gallery - jgautheron */
+    </style>
+</head>
+<body>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+    <div class="yui3-gondola-container" id="gondola" style="min-height:285px;">
+        <div class="yui3-gondola-image">
+            <div class="yui3-gondola-title-bg"></div>
+            <span class="yui3-gondola-title"></span>
+            <a href="" class="yui3-gondola-link">{@I18N:buy} <img src="/js/gondola/arrow.png" alt="" /></a>
+        </div>
+        <div class="yui-3-gondola-images-viewport">
+            <a href="#0" class="yui3-gondola-top"></a>
+            <a href="#0" class="yui3-gondola-bottom"></a>
+            <ul class="yui3-gondola-images">
+            </ul>
+            <ul class="yui3-gondola-images">
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="yui-min.js"></script>
+    <script type="text/javascript" src="gondola.js"></script>
+    <script type="text/javascript">
+    YUI().use('datasource-io', 'datasource-jsonschema', 'gondola', function(Y) {
+        var smg;
+
+        var source = '/orange/animhome.json';
+        var ds = new Y.DataSource.IO({source:source}),
+            dsCallback = {
+                success: function(e) {
+                    smg = new Y.Gondola({
+                        srcNode: '#gondola',
+                        datasource: e.response.results
+                    });
+                    smg.render();
+                },
+                failure: function(e) {
+                    throw new Error('Could not retrieve data: ' + e.error.message);
+                }
+            };
+
+        ds.plug(Y.Plugin.DataSourceJSONSchema, {
+            schema: {
+                resultListLocator: 'ResultSet.Result',
+                resultFields: ['Title', 'Thumb', 'Image', 'Link']
+            }
+        });
+
+        ds.sendRequest({
+            callback: dsCallback
+        });
+
+    });
+    </script>
+</body>
+</html>
